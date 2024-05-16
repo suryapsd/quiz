@@ -34,14 +34,17 @@ class SekolahController extends Controller
         $datatables = DataTables::of($data);
 		return $datatables
         ->addIndexColumn()
+        ->editColumn('keterangan', function($row) {
+            return optional($row)->keterangan ?? '-';
+        })
         ->addColumn('action', function($data){
             $actionBtn = "
-            <a href='javascript:void(0)' data-id='{$data->id}'  class='btn btn-icon btn-primary editData' title='edit data'><i class='tf-icons ti ti-edit'></i></a>
-            <a href='javascript:void(0)' onclick='deleteData(\"{$data->id}\")' data-id='{$data->id}' class='btn btn-icon btn-danger' title='hapus data'><i class='tf-icons ti ti-trash'></i></a>
+            <a href='javascript:void(0)' data-id='{$data->id}'  class='btn btn-icon btn-primary editData' data-bs-toggle='tooltip' data-bs-placement='top' title='edit data'><i class='tf-icons ti ti-edit'></i></a>
+            <a href='javascript:void(0)' onclick='deleteData(\"{$data->id}\")' data-id='{$data->id}' class='btn btn-icon btn-danger' data-bs-toggle='tooltip' data-bs-placement='top' title='hapus data'><i class='tf-icons ti ti-trash'></i></a>
             ";
             return $actionBtn;
         })
-        ->rawColumns(['action'])
+        ->rawColumns(['keterangan','action'])
         ->make(true);
     }
 
@@ -69,9 +72,9 @@ class SekolahController extends Controller
             ]
         );   
         if($data){
-            $response = array('success'=>1,'msg'=>'Berhasil menyimpan data pendidikan instansi');
+            $response = array('success'=>1,'msg'=>'Berhasil menyimpan data sekolah');
         }else{
-            $response = array('success'=>2,'msg'=>'Gagal menyimpan data pendidikan instansi');
+            $response = array('success'=>2,'msg'=>'Gagal menyimpan data sekolah');
         }
         return $response;
     }

@@ -11,6 +11,7 @@
     <title>QUIZ</title>
 
     <meta name="description" content="" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('admin/img/favicon/favicon.ico') }}" />
@@ -40,26 +41,17 @@
     <link rel="stylesheet" href="{{ asset('admin/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/vendor/libs/sweetalert2/sweetalert2.css') }}" />
 
+    <script src="{{ asset('admin/vendor/js/helpers.js') }}"></script>
+
+    <script src="{{ asset('admin/js/config.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('admin/vendor/css/pages/page-auth.css') }}" />
+
     <!-- Page CSS -->
     <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
   </head>
 
   <body>
-    <script>
-      @if (\Session::has('success'))
-        Swal.fire(
-          'Success',
-          '{!! \Session::get('success') !!}',
-          'success'
-        )
-      @elseif (\Session::has('error'))
-        Swal.fire(
-          'Opps!',
-          '{!! \Session::get('error') !!}',
-          'error'
-        )
-      @endif
-    </script>
+
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
@@ -101,7 +93,6 @@
       <div class="drag-target"></div>
     </div>
     <!-- / Layout wrapper -->
-
     <!-- Core JS -->
     <!-- build:js admin/vendor/js/core.js') }} -->
     <script src="{{ asset('admin/vendor/libs/jquery/jquery.js') }}"></script>
@@ -120,14 +111,38 @@
     <script src="{{ asset('admin/vendor/libs/select2/select2.js') }}"></script>
     <script src="{{ asset('admin/vendor/libs/bootstrap-select/bootstrap-select.js') }}"></script>
     <script src="{{ asset('admin/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
+    <script src="{{ asset('admin/js/validate.js') }}"></script>
 
     <!-- Main JS -->
     <script src="{{ asset('admin/js/main.js') }}"></script>
 
     <!-- Page JS -->
     <script src="{{ asset('admin/js/forms-selects.js') }}"></script>
-    <script src="{{ asset('admin/js/dashboards-analytics.js') }}"></script>
-
+    <script src="{{ asset('admin/js/pages-auth.js') }}"></script>
+    {{-- <script src="{{ asset('admin/js/dashboards-analytics.js') }}"></script> --}}
+    <script>
+      @if (\Session::has('success'))
+        Swal.fire({
+          title: 'Sukses',
+          text: '{!! \Session::get('success') !!}',
+          icon: 'success',
+          customClass: {
+            confirmButton: 'btn btn-primary'
+          },
+          buttonsStyling: false
+        });
+      @elseif (\Session::has('error'))
+        Swal.fire({
+          title: 'Opps!',
+          text: '{!! \Session::get('error') !!}',
+          icon: 'error',
+          customClass: {
+            confirmButton: 'btn btn-primary'
+          },
+          buttonsStyling: false
+        });
+      @endif
+    </script>
     @include('layouts_dashboard.metascript')
     @include('layouts_dashboard.script')
 

@@ -38,19 +38,19 @@
                 <input type="hidden" name="id" id="id">
                 <div class="">
                   <div class="col mb-3">
-                    <label for="nik" class="form-label">Nama Sekolah</label>
+                    <label for="nama_sekolah" class="form-label">Nama Sekolah <span style="color: red">*</span></label>
                     <input type="text" id="nama_sekolah" name="nama_sekolah" class="form-control"
                       placeholder="Masukkan nama instansi" />
                     <span class="invalid-feedback" id="nama_sekolah_error"></span>
                   </div>
                   <div class="col mb-3">
-                    <label for="email" class="form-label">Alamat</label>
+                    <label for="alamat" class="form-label">Alamat <span style="color: red">*</span></label>
                     <input type="text" id="alamat" name="alamat" class="form-control"
                       placeholder="Masukkan alamat sekolah" />
                     <span class="invalid-feedback" id="alamat_error"></span>
                   </div>
                   <div class="col mb-0">
-                    <label for="email" class="form-label">Keterangan</label>
+                    <label for="keterangan" class="form-label">Keterangan</label>
                     <input type="text" id="keterangan" name="keterangan" class="form-control"
                       placeholder="masukkan keterangan/deskripsi" />
                     <span class="invalid-feedback" id="keterangan_error"></span>
@@ -93,7 +93,10 @@
               params._token = "{{ csrf_token() }}";
             }
           },
-
+          initComplete: function() {
+            // Inisialisasi tooltip di dalam fungsi ini
+            $('[data-bs-toggle="tooltip"]').tooltip();
+          },
           language: {
             search: "",
             searchPlaceholder: "Type in to Search",

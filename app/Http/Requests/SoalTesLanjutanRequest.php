@@ -22,7 +22,6 @@ class SoalTesLanjutanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id_instansi' => 'required|numeric|min:0',
             'soal' => 'required|string',
             'jawaban_a' => 'required|string',
             'jawaban_b' => 'required|string',
@@ -39,10 +38,6 @@ class SoalTesLanjutanRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'id_instansi.required' => 'Kolom instansi wajib diisi.',
-            'id_instansi.numeric' => 'Kolom instansi harus berupa angka.',
-            'id_instansi.min' => 'Kolom instansi tidak boleh kurang dari :min.',
-    
             'soal.required' => 'Kolom soal wajib diisi.',
             'soal.string' => 'Kolom soal harus berupa teks.',
     

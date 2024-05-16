@@ -13,7 +13,12 @@ class Instansi extends Model
 
     public function pendidikans()
     {
-        return $this->hasMany(PendidikanInstansi::class,);
+        return $this->hasMany(PendidikanInstansi::class, 'id_instansi', 'id');
+    }
+
+    public function soalTesAwals()
+    {
+        return $this->hasMany(SoalTesAwal::class, 'id_instansi', 'id');
     }
 
 }

@@ -3,14 +3,16 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\PageController;
-use App\Http\Controllers\Ckeditorcontroller;
+use App\Http\Controllers\CkeditorController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\OperatorController;
 use App\Http\Controllers\Admin\InstansiController;
 use App\Http\Controllers\Admin\PendidikanInstansiController;
 use App\Http\Controllers\Admin\SekolahController;
 use App\Http\Controllers\Admin\SiswaController;
 use App\Http\Controllers\Admin\JenisSoalController;
-use App\Http\Controllers\Admin\SoalController;
+use App\Http\Controllers\Admin\SoalTesAwalController;
+use App\Http\Controllers\Admin\SoalTesLanjutanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,11 +39,12 @@ Route::get('/', function () {
     return view('welcome');
 })->name("landing");
 
+
 Route::get("/dashboard/redirect", [PageController::class, "dashboard"])->middleware(["auth"])->name("dashboard");
-Route::get("/profile/redirect", [PageController::class, "profile"])->middleware(["auth"])->name("profile");
 
 Route::name("auth.")->group(function () {
     Route::middleware(["guest"])->group(function() {
+        Route::get("/home", [AuthController::class, "login"]);
         Route::get("/login", [AuthController::class, "login"])->name("login");
         Route::get("/register", [AuthController::class, "register"])->name("register");
         Route::post("/authenticate", [AuthController::class, "authenticate"])->name("authenticate");
@@ -50,23 +53,37 @@ Route::name("auth.")->group(function () {
     Route::post("/logout", [AuthController::class, "logout"])->middleware(["auth"])->name("logout");
 });
 
-
 Route::post("ckeditor/upload", [CkeditorController::class, 'upload'])->name("ckeditor.upload");
+
 Route::prefix("/admin")->middleware(["auth", "admin"])->name("admin.")->group(function () {
+    Route::resource("operator", OperatorController::class);
+    Route::post("getOperator", [OperatorController::class, 'getData']);
+
     Route::resource("instansi", InstansiController::class);
     Route::post("getInstansi", [InstansiController::class, 'getData']);
+
     Route::resource("instansi/{id_instansi}/pendidikan-instansi", PendidikanInstansiController::class);
     Route::post("getPendidikan/{id_instansi}", [PendidikanInstansiController::class, 'getData']);
+
     Route::resource("sekolah", SekolahController::class);
     Route::post("getSekolah", [SekolahController::class, 'getData']);
+
     Route::resource("siswa", SiswaController::class);
     Route::post("getSiswa", [SiswaController::class, 'getData']);
+
     Route::resource("jenis-soal", JenisSoalController::class);
     Route::post("getJenisSoal", [JenisSoalController::class, 'getData']);
-    Route::resource("jenis-soal/{id_jenis_soal}/soal", SoalController::class);
+
+    Route::resource("/soal-awalan/{id}/tambah-soal", SoalTesAwalController::class);
+    Route::get("/soal-awalan", [SoalTesAwalController::class, 'listInstansi']);
+    Route::post("getInstansiSoal", [SoalTesAwalController::class, 'getData']);
+    Route::post("getSoalAwal/{id}", [SoalTesAwalController::class, 'getDataSoal']);
+
+    Route::resource("/soal-lanjutan/{id}/tambah-soal", SoalTesLanjutanController::class);
+    Route::get("/soal-lanjutan", [SoalTesLanjutanController::class, 'listPendidikanInstansi']);
+    Route::post("getPendidikanInstansiSoal", [SoalTesLanjutanController::class, 'getData']);
+    Route::post("getSoalLanjutan/{id}", [SoalTesLanjutanController::class, 'getDataSoal']);
     Route::get("/dashboard", [AdminDashboardController::class, "dashboard"])->name("dashboard");
-    Route::get("/profile", [AdminDashboardController::class, "profile"])->name("profile");
-    Route::patch('/{user}/profile/save', [AdminDashboardController::class, 'profileSave'])->name("profile.save");
 });
 
 Route::middleware(["auth", "user"])->name("user.")->group(function () {

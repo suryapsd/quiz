@@ -6,10 +6,10 @@
     <div class="card">
       <div class="card-header d-flex align-items-center justify-content-between">
         <h5 class="mb-0">List Data {{ $title }}</h5>
-        {{-- <a href="javascript:void(0)" id="addNewData" class="btn btn-primary">
+        <a href="javascript:void(0)" id="addNewData" class="btn btn-primary">
           <span class="tf-icons bx bx-plus"></span>&nbsp; Tambah Data
-        </a> --}}
-        <div class="mb-3">
+        </a>
+        {{-- <div class="mb-3">
           <label for="filterSchool" class="form-label">Filter by School:</label>
           <select id="filterSchool" class="selectpicker" data-style="btn-default" data-live-search="true">
             <option value="" selected>All Schools</option>
@@ -17,7 +17,7 @@
               <option value="{{ $sekolah->id }}">{{ $sekolah->nama_sekolah }}</option>
             @endforeach
           </select>
-        </div>
+        </div> --}}
       </div>
       <div class="card-datatable table-responsive">
         <table id="{{ $table_id }}" class="datatables-users-account table border-top">
@@ -50,34 +50,40 @@
                 <input type="hidden" name="id_user" id="id_user">
                 <div class="">
                   <div class="col mb-3">
-                    <label for="nik" class="form-label">Nama Siswa</label>
-                    <input type="text" id="nama" name="nama" class="form-control"
-                      placeholder="Masukkan nama instansi" />
+                    <label for="nik" class="form-label">Nama Siswa <span style="color: red">*</span></label>
+                    <input type="text" id="nama" name="nama" class="form-control" placeholder="Masukkan nama instansi" />
                     <span class="invalid-feedback" id="nama_error"></span>
                   </div>
                   <div class="col mb-3">
-                    <label for="id_sekolah" class="form-label">Sekolah</label>
-                    <select id="id_sekolah" name="id_sekolah" class="selectpicker w-100" data-style="btn-default"
-                      data-live-search="true">
+                    <label for="id_sekolah" class="form-label">Sekolah <span style="color: red">*</span></label>
+                    <select id="id_sekolah" name="id_sekolah" class="form-control selectpicker w-100 @error('id_sekolah') is-invalid @enderror" data-style="btn-default" data-live-search="true">
+                      <option value="">Pilih Instansi</option>
+                      @foreach ($sekolahs as $item)
+                        <option data-tokens="{{ $item->nama_sekolah }}" value="{{ $item->id }}">
+                          {{ $item->nama_sekolah }}
+                        </option>
+                      @endforeach
                     </select>
                     <span class="invalid-feedback" id="id_sekolah_error"></span>
                   </div>
                 </div>
                 <div class="row mb-3">
                   <div class="col">
-                    <label for="email" class="form-label">No Whatsapp</label>
+                    <label for="email" class="form-label">No Whatsapp <span style="color: red">*</span></label>
                     <input type="text" id="no_wa" name="no_wa" class="form-control" placeholder="1xx" />
                     <span class="invalid-feedback" id="no_wa_error"></span>
                   </div>
                   <div class="col">
-                    <label for="email" class="form-label">Tinggi Badan</label>
+                    <label for="email" class="form-label">Tinggi Badan <span style="color: red">*</span></label>
                     <input type="text" id="tinggi_badan" name="tinggi_badan" class="form-control" placeholder="1xx" />
                     <span class="invalid-feedback" id="tinggi_badan_error"></span>
                   </div>
                   <div class="col">
-                    <label for="email" class="form-label">Jenis Kelamin</label>
-                    <input type="text" id="jenis_kelamin" name="jenis_kelamin" class="form-control"
-                      placeholder="1xx" />
+                    <label for="email" class="form-label">Jenis Kelamin <span style="color: red">*</span></label>
+                    <select class="form-select @error('jenis_kelamin') is-invalid @enderror" name="jenis_kelamin" aria-label="Default select example">
+                      <option value="Laki-laki">Laki-laki</option>
+                      <option value="Perempuan">Perempuan</option>
+                    </select>
                     <span class="invalid-feedback" id="jenis_kelamin_error"></span>
                   </div>
                 </div>
@@ -148,15 +154,15 @@
               class: 'text-left'
             },
             {
-              data: 'sekolah',
-              name: 'sekolah',
+              data: 'nama',
+              name: 'nama',
               orderable: true,
               searchable: true,
               class: 'text-left'
             },
             {
-              data: 'nama',
-              name: 'nama',
+              data: 'sekolah',
+              name: 'sekolah',
               orderable: true,
               searchable: true,
               class: 'text-left'
@@ -189,7 +195,45 @@
               searchable: false,
               class: 'text-center'
             }
-          ]
+          ],
+          dom: '<"row me-2"' +
+            '<"col-md-2"<"me-3"l>>' +
+            '<"col-md-10"<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0"f<"sekolah mb-3 mb-md-0 mx-3">B>>' +
+            '>t' +
+            '<"row mx-2"' +
+            '<"col-sm-12 col-md-6"i>' +
+            '<"col-sm-12 col-md-6"p>' +
+            '>',
+          // Buttons with Dropdown
+          buttons: [{
+            extend: 'csv',
+            className: 'btn btn-label-primary'
+          }],
+          // For responsive popup
+          initComplete: function() {
+            // Adding role filter once table initialized
+            this.api()
+              .columns(2)
+              .every(function() {
+                var column = this;
+                var select = $(
+                    '<select id="UserRole" class="form-select"><option value=""> Pilih Sekolah </option></select>'
+                  )
+                  .appendTo('.sekolah')
+                  .on('change', function() {
+                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                    column.search(val ? '^' + val + '$' : '', true, false).draw();
+                  });
+
+                column
+                  .data()
+                  .unique()
+                  .sort()
+                  .each(function(d, j) {
+                    select.append('<option value="' + d + '" class="text-capitalize">' + d + '</option>');
+                  });
+              });
+          }
         });
 
         $("#{{ $table_id }}").DataTable().processing(true);
@@ -206,6 +250,70 @@
         // Handle search input changes using DataTables API
         $('#{{ $table_id }}_filter input').on('keyup', function() {
           table.search(this.value).draw();
+        });
+      });
+
+      $('#addNewData').click(function() {
+        $('#saveBtn').val("create-jenis");
+        $('#id').val('');
+        $('#modalForm').trigger("reset");
+        $('#modelHeading').html("Tambah Data Instansi");
+        $('#ajaxModel').modal('show');
+      });
+
+      $('#saveBtn').click(function(e) {
+        e.preventDefault();
+        $(this).html('Sending..');
+
+        // Remove the error handling for the "jenis" and "Nama" fields
+        $('#jenis').removeClass('is-invalid');
+        $('#jenis-error').remove();
+
+        $.ajax({
+          data: $('#modalForm').serialize(),
+          url: "{{ url('/admin/siswa') }}",
+          type: "POST",
+          dataType: 'json',
+          success: function(data) {
+            $('#modalForm').trigger("reset");
+            $('#saveBtn').html('Simpan');
+            $('#ajaxModel').modal('hide');
+            if (data.success == 1) {
+              Swal.fire({
+                title: 'Sukses',
+                text: data.msg,
+                icon: 'success',
+                customClass: {
+                  confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+              });
+            } else {
+              Swal.fire({
+                title: 'Gagal',
+                text: data.msg,
+                icon: 'error',
+                customClass: {
+                  confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+              });
+            }
+            table.draw();
+          },
+          error: function(data) {
+            console.log('Error:', data);
+            $('#saveBtn').html('Save Changes');
+
+            // Error handling for specific input fields
+            if (data.responseJSON.errors) {
+              var errors = data.responseJSON.errors;
+              $.each(errors, function(key, value) {
+                $("#" + key).addClass("is-invalid");
+                $("#" + key + "_error").text(value[0]);
+              });
+            }
+          }
         });
       });
 

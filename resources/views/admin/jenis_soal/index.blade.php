@@ -6,7 +6,7 @@
     <div class="card">
       <div class="card-header d-flex align-items-center justify-content-between">
         <h5 class="mb-0">List Data {{ $title }}</h5>
-        <a href="{{ route('admin.jenis-soal.create') }}" id="addNewData" class="btn btn-primary">
+        <a href="javascript:void(0)" id="addNewData" class="btn btn-primary">
           <span class="tf-icons bx bx-plus"></span>&nbsp; Tambah Data
         </a>
       </div>
@@ -39,21 +39,37 @@
                 <input type="hidden" name="id" id="id">
                 <div class="">
                   <div class="col mb-3">
-                    <label for="nik" class="form-label">Pendidikan</label>
-                    <input type="text" id="nama_sekolah" name="nama_sekolah" class="form-control"
-                      placeholder="Masukkan nama instansi" />
-                    <span class="invalid-feedback" id="nama_sekolah_error"></span>
+                    <label for="nama_jenis_soal" class="form-label">Jenis Soal <span style="color: red">*</span></label>
+                    <input type="text" id="nama_jenis_soal" name="nama_jenis_soal" class="form-control"
+                      placeholder="Masukkan jenis soal" value="{{ old('nama_jenis_soal') }}" />
+                    <span class="invalid-feedback" id="jenis_soal_error"></span>
                   </div>
                   <div class="col mb-3">
-                    <label for="email" class="form-label">Soal</label>
-                    <input type="text" id="soal" name="soal" class="form-control"
-                      placeholder="Masukkan soal" />
-                    <span class="invalid-feedback" id="soal_error"></span>
+                    <label class="form-label" for="id_pendidikan_instansi">Instansi <span
+                        style="color: red">*</span></label>
+                    <select id="id_pendidikan_instansi" name="id_pendidikan_instansi"
+                      class="form-control @error('id_pendidikan_instansi') is-invalid @enderror selectpicker w-100"
+                      data-style="btn-default" data-live-search="true">
+                      <option value="">Pilih pendidikan instansi</option>
+                      @foreach ($pendidikan as $item)
+                        <option data-tokens="{{ $item->nama_pendidikan }}" value="{{ $item->id }}"
+                          {{ old('id_pendidikan_instansi') == $item->id ? 'selected' : '' }}>
+                          {{ $item->nama_pendidikan }}
+                        </option>
+                      @endforeach
+                    </select>
+                    <span class="invalid-feedback" id="id_pendidikan_instansi_error"></span>
+                  </div>
+                  <div class="col mb-3">
+                    <label for="jumlah_soal" class="form-label">Jumlah Soal <span style="color: red">*</span></label>
+                    <input type="number" id="jumlah_soal" name="jumlah_soal" class="form-control"
+                      placeholder="Masukkan jumlah soal" value="{{ old('jumlah_soal') }}" />
+                    <span class="invalid-feedback" id="jumlah_soal_error"></span>
                   </div>
                   <div class="col mb-0">
-                    <label for="email" class="form-label">Keterangan</label>
+                    <label for="keterangan" class="form-label">Keterangan</label>
                     <input type="text" id="keterangan" name="keterangan" class="form-control"
-                      placeholder="masukkan keterangan/deskripsi" />
+                      placeholder="masukkan keterangan/deskripsi" value="{{ old('keterangan') }}" />
                     <span class="invalid-feedback" id="keterangan_error"></span>
                   </div>
                 </div>
@@ -132,8 +148,8 @@
               class: 'text-left'
             },
             {
-              data: 'soal',
-              name: 'soal',
+              data: 'jumlah_soal',
+              name: 'jumlah_soal',
               orderable: true,
               searchable: true,
               class: 'text-left'
@@ -170,6 +186,87 @@
         $('#{{ $table_id }}_filter input').on('keyup', function() {
           table.search(this.value).draw();
         });
+      });
+
+      $('#addNewData').click(function() {
+        $('#saveBtn').val("create-jenis");
+        $('#id').val('');
+        $('#modalForm').trigger("reset");
+        $('#modelHeading').html("Tambah Data Instansi");
+        $('#ajaxModel').modal('show');
+      });
+
+      $('#saveBtn').click(function(e) {
+        e.preventDefault();
+        $(this).html('Sending..');
+
+        // Remove the error handling for the "jenis" and "Nama" fields
+        $('#jenis').removeClass('is-invalid');
+        $('#jenis-error').remove();
+
+        $.ajax({
+          data: $('#modalForm').serialize(),
+          url: "{{ url('/admin/jenis-soal') }}",
+          type: "POST",
+          dataType: 'json',
+          success: function(data) {
+            $('#modalForm').trigger("reset");
+            $('#saveBtn').html('Simpan');
+            $('#ajaxModel').modal('hide');
+            if (data.success == 1) {
+              Swal.fire({
+                title: 'Sukses',
+                text: data.msg,
+                icon: 'success',
+                customClass: {
+                  confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+              }).then((result) => {
+                // Redirect to the edit page
+                if (result.isConfirmed) {
+                  window.location.href = "{{ url('/admin/jenis-soal') }}/" + data.id + "/edit";
+                }
+              });
+            } else {
+              Swal.fire({
+                title: 'Gagal',
+                text: data.msg,
+                icon: 'error',
+                customClass: {
+                  confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+              });
+            }
+            table.draw();
+          },
+          error: function(data) {
+            console.log('Error:', data);
+            $('#saveBtn').html('Save Changes');
+
+            // Error handling for specific input fields
+            if (data.responseJSON.errors) {
+              var errors = data.responseJSON.errors;
+              $.each(errors, function(key, value) {
+                $("#" + key).addClass("is-invalid");
+                $("#" + key + "_error").text(value[0]);
+              });
+            }
+          }
+        });
+      });
+
+
+      function removeErrors() {
+        $(".form-control").removeClass("is-invalid");
+        $(".invalid-feedback").text("");
+      }
+
+      // Function to reset form and remove errors when modal is closed
+      $("#ajaxModel").on("hidden.bs.modal", function() {
+        $('#modalForm').trigger("reset");
+        removeErrors();
       });
 
       function deleteData(id) {

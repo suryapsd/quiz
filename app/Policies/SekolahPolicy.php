@@ -13,7 +13,7 @@ class SekolahPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->role === 'admin';
+        return true;
     }
 
     /**
@@ -21,7 +21,7 @@ class SekolahPolicy
      */
     public function view(User $user, Sekolah $sekolah): bool
     {
-        return $user->role === 'admin';
+        return true;
     }
 
     /**

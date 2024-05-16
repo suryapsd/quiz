@@ -29,20 +29,23 @@ class InstansiController extends Controller
     public function getData(Request $request)
     {
         $this->authorize("viewAny", Instansi::class);
-        $data = Instansi::all();
+        $data = Instansi::withCount('pendidikans')->get();
 
         $datatables = DataTables::of($data);
 		return $datatables
         ->addIndexColumn()
+        ->editColumn('jumlah_pendidikan', function($row) {
+            return  optional($row)->pendidikans_count ?? '-';
+        })
         ->addColumn('action', function($data){
             $actionBtn = "
-            <a href='/admin/instansi/$data->id/pendidikan-instansi' class='btn btn-icon btn-success' title='list pendidikan instansi'><i class='tf-icons ti ti-building-arch'></i></a>
-            <a href='javascript:void(0)' data-id='{$data->id}'  class='btn btn-icon btn-primary editData' title='edit data'><i class='tf-icons ti ti-edit'></i></a>
-            <a href='javascript:void(0)' onclick='deleteData(\"{$data->id}\")' data-id='{$data->id}' class='btn btn-icon btn-danger' title='hapus data'><i class='tf-icons ti ti-trash'></i></a>
+            <a href='/admin/instansi/$data->id/pendidikan-instansi' class='btn btn-icon btn-success' data-bs-toggle='tooltip' data-bs-placement='top' title='list pendidikan instansi'><i class='tf-icons ti ti-building-arch'></i></a>
+            <a href='javascript:void(0)' data-id='{$data->id}'  class='btn btn-icon btn-primary editData' data-bs-toggle='tooltip' data-bs-placement='top' title='edit data'><i class='tf-icons ti ti-edit'></i></a>
+            <a href='javascript:void(0)' onclick='deleteData(\"{$data->id}\")' data-id='{$data->id}' class='btn btn-icon btn-danger' data-bs-toggle='tooltip' data-bs-placement='top' title='hapus data'><i class='tf-icons ti ti-trash'></i></a>
             ";
             return $actionBtn;
         })
-        ->rawColumns(['action'])
+        ->rawColumns(['jumlah_pendidikan', 'action'])
         ->make(true);
     }
 

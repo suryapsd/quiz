@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('id_pendidikan_instansi')->unsigned()->nullable();
             $table->string('nama_jenis_soal')->nullable();
+            $table->tinyInteger('jumlah_soal')->nullable();
             $table->string('keterangan')->nullable();
             
             $table->foreign("id_pendidikan_instansi")->references("id")->on("pendidikan_instansis")->onDelete("cascade");

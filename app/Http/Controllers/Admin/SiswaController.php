@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Siswa;
 use App\Models\Sekolah;
+use App\Models\User;
 use App\Http\Requests\SiswaRequest;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class SiswaController extends Controller
 {
@@ -78,25 +80,30 @@ class SiswaController extends Controller
      */
     public function store(SiswaRequest $request)
     {
-        // $this->authorize("create", Siswa::class);
-        // $data = $request->validated();
-        // $data = Siswa::updateOrCreate(
-        //     ['id' => $request->id],
-        //     [
-        //         'id_user' => $datas['id_user'],
-        //         'id_sekolah' => $datas['id_sekolah'],
-        //         'nama' => $datas['nama'],
-        //         'no_wa' => $datas['no_wa'],
-        //         'tinggi_badan' => $datas['tinggi_badan'],
-        //         'jenis_kelamin' => $datas['jenis_kelamin'],
-        //     ]
-        // );   
-        // if($data){
-        //     $response = array('success'=>1,'msg'=>'Berhasil menyimpan data pendidikan instansi');
-        // }else{
-        //     $response = array('success'=>2,'msg'=>'Gagal menyimpan data pendidikan instansi');
-        // }
-        // return $response;
+        $this->authorize("create", Siswa::class);
+        $datas = $request->validated();
+        $user = User::create([
+            'username' => $datas['no_wa'],
+            'password' => Hash::make($datas['no_wa'])
+        ]);
+
+        $data = Siswa::updateOrCreate(
+            ['id' => $request->id],
+            [
+                'id_user' => $user->id,
+                'id_sekolah' => $datas['id_sekolah'],
+                'nama' => $datas['nama'],
+                'no_wa' => $datas['no_wa'],
+                'tinggi_badan' => $datas['tinggi_badan'],
+                'jenis_kelamin' => $datas['jenis_kelamin'],
+            ]
+        );   
+        if($data){
+            $response = array('success'=>1,'msg'=>'Berhasil menyimpan data pendidikan instansi');
+        }else{
+            $response = array('success'=>2,'msg'=>'Gagal menyimpan data pendidikan instansi');
+        }
+        return $response;
     }
 
     /**
@@ -137,7 +144,7 @@ class SiswaController extends Controller
         $this->authorize("update", $siswa);
         $data = $request->validated();
         $siswa->update($data);
-        return redirect()->route('admin.siswa.index')->with("success", "berhasil update siswa");
+        return redirect()->back()->with("success", "berhasil update siswa");
     }
 
     /**
@@ -145,7 +152,7 @@ class SiswaController extends Controller
      */
     public function destroy(Siswa $siswa)
     {
-        $this->authorize("delete", [$sekolah, Auth::user()]);
+        $this->authorize("delete", [$siswa, Auth::user()]);
         $siswa->delete();
         if($siswa){
             $response = array('success'=>1,'msg'=>'Berhasil menghapus data siswa');

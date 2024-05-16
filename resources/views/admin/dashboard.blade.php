@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="row g-4 mb-4">
-      <div class="col-sm-6 col-xl-3">
+      <div class="col-sm-6 col-xl-4">
         <div class="card">
           <div class="card-body">
             <div class="d-flex align-items-start justify-content-between">
@@ -39,7 +39,25 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-6 col-xl-3">
+      <div class="col-sm-6 col-xl-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex align-items-start justify-content-between">
+              <div class="content-left">
+                <span>Pendidikan</span>
+                <div class="d-flex align-items-center my-1">
+                  <h4 class="mb-0 me-2">{{ $pendidikan }}</h4>
+                </div>
+                <span>---</span>
+              </div>
+              <span class="badge bg-label-success rounded p-2">
+                <i class="ti ti-medical-cross ti-sm"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xl-4">
         <div class="card">
           <div class="card-body">
             <div class="d-flex align-items-start justify-content-between">
@@ -52,42 +70,6 @@
               </div>
               <span class="badge bg-label-danger rounded p-2">
                 <i class="ti ti-school ti-sm"></i>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6 col-xl-3">
-        <div class="card">
-          <div class="card-body">
-            <div class="d-flex align-items-start justify-content-between">
-              <div class="content-left">
-                <span>Siswa</span>
-                <div class="d-flex align-items-center my-1">
-                  <h4 class="mb-0 me-2">{{ $siswa }}</h4>
-                </div>
-                <span>---</span>
-              </div>
-              <span class="badge bg-label-success rounded p-2">
-                <i class="ti ti-users ti-sm"></i>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6 col-xl-3">
-        <div class="card">
-          <div class="card-body">
-            <div class="d-flex align-items-start justify-content-between">
-              <div class="content-left">
-                <span>Jenis Soal</span>
-                <div class="d-flex align-items-center my-1">
-                  <h4 class="mb-0 me-2">{{ $jenis_soal }}</h4>
-                </div>
-                <span>---</span>
-              </div>
-              <span class="badge bg-label-warning rounded p-2">
-                <i class="ti ti-quote ti-sm"></i>
               </span>
             </div>
           </div>

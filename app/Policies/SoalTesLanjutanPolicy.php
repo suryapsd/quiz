@@ -13,7 +13,7 @@ class SoalTesLanjutanPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->role === 'admin';
+        return true;
     }
 
     /**
@@ -21,7 +21,7 @@ class SoalTesLanjutanPolicy
      */
     public function view(User $user, SoalTesLanjutan $soalTesLanjutan): bool
     {
-        return $user->role === 'admin';
+        return true;
     }
 
     /**

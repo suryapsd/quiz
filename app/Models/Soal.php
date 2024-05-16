@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Soal extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
     protected $guarded = ['id'];
 
     public function jenis_soal()

@@ -6,17 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
-    <!-- ===============================================-->
-    <!--    Document Title-->
-    <!-- ===============================================-->
     <title>Quiz</title>
 
-
-    <!-- ===============================================-->
-    <!--    Favicons-->
-    <!-- ===============================================-->
-    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/fonts/boxicons.css') }}" />
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('admin/assets/img/avatars/stamp.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('admin/assets/img/avatars/stamp.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('admin/assets/img/avatars/stamp.png') }}">
@@ -25,10 +16,6 @@
     <meta name="msapplication-TileImage" content="{{ asset('admin/assets/img/avatars/stamp.png') }}">
     <meta name="theme-color" content="#ffffff">
 
-
-    <!-- ===============================================-->
-    <!--    Stylesheets-->
-    <!-- ===============================================-->
     <link href="{{ asset('user/assets/css/theme.css') }}" rel="stylesheet" />
 
     <style>
@@ -71,7 +58,6 @@
 
 
   <body>
-
     <!-- ===============================================-->
     <!--    Main Content-->
     <!-- ===============================================-->
@@ -84,18 +70,18 @@
             aria-label="Toggle navigation"><span class="navbar-toggler-icon"> </span></button>
           <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto align-items-center">
-              <li class="nav-item"><a class="nav-link" aria-current="page" href="#home">Home</a></li>
+              {{-- <li class="nav-item"><a class="nav-link" aria-current="page" href="#home">Home</a></li>
               <li class="nav-item"><a class="nav-link" aria-current="page" href="#tentang">Tentang</a></li>
               <li class="nav-item"><a class="nav-link" aria-current="page" href="#fitur">Fitur</a></li>
               <li class="nav-item"><a class="nav-link" aria-current="page" href="#faq">FAQ</a></li>
-              <li class="nav-item"><a class="nav-link" aria-current="page" href="#kontak">Kontak</a></li>
+              <li class="nav-item"><a class="nav-link" aria-current="page" href="#kontak">Kontak</a></li> --}}
               @auth
                 <li class="nav-item navbar-dropdown dropdown-user dropdown d-flex ms-3">
                   <a class="nav-link" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
                       <img width="30" src="{{ asset('admin/assets/img/avatars/1.png') }}" alt
                         class="w-px-40 h-auto rounded-circle" />
-                      <span class="ms-1">{{ Auth::user()->profile->fullname }}</span>
+                      <span class="ms-1">{{ Auth::user()->email }}</span>
                     </div>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
@@ -110,17 +96,17 @@
                           </div>
                           <div class="flex-grow-1">
                             <small class="fw-semibold d-block">{{ Auth::user()->email }}</small>
-                            <small class="text-muted">{{ Auth::user()->profile->status }}</small>
+                            <small class="text-muted">{{ Auth::user()->role }}</small>
                           </div>
                         </div>
                       </a>
                     </li>
-                    <li>
+                    {{-- <li>
                       <a class="dropdown-item" href="{{ route('profile') }}">
                         <i class="bx bxs-user-circle me-2"></i>
                         <small>Profile</small>
                       </a>
-                    </li>
+                    </li> --}}
                     <li>
                       <a class="dropdown-item" href="{{ route('dashboard') }}">
                         <i class="bx bx-list-ul me-2"></i>
@@ -148,7 +134,7 @@
             @guest
               <div class="d-flex ms-lg-4">
                 <a class="btn btn-secondary-outline" href="{{ route('auth.login') }}">Masuk</a>
-                <a class="btn btn-warning ms-3" href="{{ route('auth.register') }}">Register</a>
+                {{-- <a class="btn btn-warning ms-3" href="{{ route('auth.register') }}">Register</a> --}}
               </div>
             @endguest
           </div>
@@ -161,7 +147,7 @@
               <h1 class="mb-4 fs-9 fw-bold">Quiz Online Terbaik untuk Kemajuan Akademis Anda</h1>
               <p class="mb-6 lead text-secondary">Nikmati kemudahan mengelola ujian, pantauan proktor canggih, dan
                 analisis hasil yang mendalam untuk mendukung kemajuan akademis Anda.</p>
-              <div class="text-center text-md-start"><a class="btn btn-warning me-3 btn-lg" href="/register"
+              <div class="text-center text-md-start"><a class="btn btn-warning me-3 btn-lg" href="/login"
                   role="button">Coba Sekarang!</a></div>
             </div>
             <div class="col-md-6 text-end"><img class="pt-7 pt-md-0 img-fluid"
@@ -172,7 +158,7 @@
 
       <!-- ============================================-->
       <!-- <section> begin ============================-->
-      <section class="pt-10" id="tentang">
+      {{-- <section class="pt-10" id="tentang">
 
         <div class="container">
           <div class="row">
@@ -204,7 +190,7 @@
           </div>
         </div><!-- end of .container-->
 
-      </section>
+      </section> --}}
       <!-- <section> close ============================-->
       <!-- ============================================-->
 
@@ -277,7 +263,7 @@
 
       <!-- ============================================-->
       <!-- <section> begin ============================-->
-      <section class="py-md-10" id="kontak">
+      {{-- <section class="py-md-10" id="kontak">
         <div class="bg-holder z-index--1 bottom-0 d-none d-lg-block background-position-top"
           style="background-image:url(./user/assets/img/superhero/oval.png); opacity:.5; background-position: top !important ;">
         </div>
@@ -292,7 +278,7 @@
             </div>
           </div>
         </div><!-- end of .container-->
-      </section>
+      </section> --}}
       <!-- <section> close ============================-->
       <!-- ============================================-->
 

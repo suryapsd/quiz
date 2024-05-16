@@ -24,7 +24,7 @@ class SiswaRequest extends FormRequest
         return [
             'id_sekolah' => 'required|numeric|min:0',
             'nama' => 'required|string|max:255',
-            'no_wa' => 'required|numeric',
+            'no_wa' => 'required|numeric|unique:siswas,no_wa',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan', // Adjust the allowed values as needed
             'tinggi_badan' => 'required|numeric|min:0',
         ];

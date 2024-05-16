@@ -29,7 +29,7 @@ class SiswaPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return ($user->role === 'user') || ($user->role === 'admin');
     }
 
     /**

@@ -8,7 +8,7 @@
     </a>
     <div class="card">
       <div class="card-header d-flex align-items-center justify-content-between">
-        <h5 class="mb-0">List Data {{ $title }} {{ $instansi->nama_instansi }}</h5>
+        <h5 class="mb-0">List Data Pendidikan {{ $instansi->nama_instansi }}</h5>
         <a href="javascript:void(0)" id="addNewData" class="btn btn-primary">
           <span class="tf-icons bx bx-plus"></span>&nbsp; Tambah Data
         </a>
@@ -40,22 +40,24 @@
               <div class="modal-body">
                 <input type="hidden" name="id" id="id">
                 <div class="col mb-3">
-                  <label for="nik" class="form-label">Nama Instansi</label>
+                  <label for="nama_pendidikan" class="form-label">Nama Instansi <span style="color: red">*</span></label>
                   <input type="text" id="nama_pendidikan" name="nama_pendidikan" class="form-control"
                     placeholder="Masukkan nama instansi" />
                   <span class="invalid-feedback" id="nama_pendidikan_error"></span>
                 </div>
                 <div class="row">
                   <div class="col mb-0">
-                    <label for="email" class="form-label">Tinggi Badan Minimal</label>
-                    <input type="text" id="min_tinggi_badan" name="min_tinggi_badan" class="form-control"
-                      placeholder="1xx" />
+                    <label for="min_tinggi_badan" class="form-label">Tinggi Badan Minimal <span
+                        style="color: red">*</span></label>
+                    <input type="number" min="1" id="min_tinggi_badan" name="min_tinggi_badan"
+                      class="form-control" placeholder="1xx" />
                     <span class="invalid-feedback" id="min_tinggi_badan_error"></span>
                   </div>
                   <div class="col mb-0">
-                    <label for="email" class="form-label">Nilai Minimal Tes Lanjutan</label>
-                    <input type="text" id="min_nilai_tes_lanjutan" name="min_nilai_tes_lanjutan" class="form-control"
-                      placeholder="1xx" />
+                    <label for="min_nilai_tes_lanjutan" class="form-label">Nilai Minimal Tes Lanjutan <span
+                        style="color: red">*</span></label>
+                    <input type="number" min="1" id="min_nilai_tes_lanjutan" name="min_nilai_tes_lanjutan"
+                      class="form-control" placeholder="1xx" />
                     <span class="invalid-feedback" id="min_nilai_tes_lanjutan_error"></span>
                   </div>
                 </div>
@@ -96,7 +98,10 @@
               params._token = "{{ csrf_token() }}";
             }
           },
-
+          initComplete: function() {
+            // Inisialisasi tooltip di dalam fungsi ini
+            $('[data-bs-toggle="tooltip"]').tooltip();
+          },
           language: {
             search: "",
             searchPlaceholder: "Type in to Search",
@@ -285,7 +290,7 @@
               dataType: "JSON",
               success: function(data) {
                 if (data.success == 1) {
-                  table.ajax.reload();
+                  table.draw();
                   Swal.fire({
                     title: 'Sukses',
                     text: data.msg,

@@ -13,7 +13,7 @@ class InstansiPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->role === 'admin';
+        return true;
     }
 
     /**
@@ -21,7 +21,7 @@ class InstansiPolicy
      */
     public function view(User $user, Instansi $instansi): bool
     {
-        return $user->role === 'admin';
+        return true;
     }
 
     /**

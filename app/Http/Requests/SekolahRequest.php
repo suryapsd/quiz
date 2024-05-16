@@ -24,7 +24,7 @@ class SekolahRequest extends FormRequest
         return [
             'nama_sekolah' => 'required|string|max:255',
             'alamat' => 'required|string',
-            'keterangan' => 'required|string',
+            'keterangan' => 'nullable|string',
         ];
     }
 

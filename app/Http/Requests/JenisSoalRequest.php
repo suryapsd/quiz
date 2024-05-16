@@ -22,8 +22,10 @@ class JenisSoalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_jenis_soal' => 'required|string|max:255',
-            'keterangan' => 'required|string',
+            'nama_jenis_soal' => 'required|string',
+            'id_pendidikan_instansi' => 'required',
+            'jumlah_soal' => 'required|string',
+            'keterangan' => 'nullable|string',
         ];
     }
 
@@ -34,12 +36,9 @@ class JenisSoalRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'nama_jenis_soal.required' => 'Kolom nama jenis soal wajib diisi.',
-            'nama_jenis_soal.string' => 'Kolom nama jenis soal harus berupa teks.',
-            'nama_jenis_soal.max' => 'Kolom nama jenis soal tidak boleh lebih dari :max karakter.',
-    
-            'keterangan.required' => 'Kolom keterangan wajib diisi.',
-            'keterangan.string' => 'Kolom keterangan harus berupa teks.',
+            'nama_jenis_soal.required' => 'Nama jenis soal harus diisi.',
+            'id_pendidikan_instansi.required' => 'Pendidikan instansi harus diisi.',
+            'jumlah_soal.required' => 'Jumlah soal harus diisi.',
         ];
     }
 }

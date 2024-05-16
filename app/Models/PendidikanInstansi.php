@@ -15,4 +15,9 @@ class PendidikanInstansi extends Model
     {
         return $this->belongsTo(Instansi::class, 'id_instansi');
     }
+
+    public function soalTesLanjutans()
+    {
+        return $this->hasMany(SoalTesLanjutan::class, 'id_pendidikan_instansi', 'id');
+    }
 }

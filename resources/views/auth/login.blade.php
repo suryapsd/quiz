@@ -83,7 +83,7 @@
                   <b>Opps!</b> {{ session('error') }}
                 </div>
               @endif
-              <form action="{{ route('auth.authenticate') }}" method="post">
+              <form id="loginForm" action="{{ route('auth.authenticate') }}" method="post">
                 @csrf
                 <div class="mb-3">
                   <label for="email" class="form-label">Email</label>
@@ -106,7 +106,7 @@
                     <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
                   </div>
                 </div>
-                <div class="mb-3 d-flex justify-content-between">
+                {{-- <div class="mb-3 d-flex justify-content-between">
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="remember-me" />
                     <label class="form-check-label" for="remember-me"> Remember Me </label>
@@ -114,18 +114,18 @@
                   <a href="auth-forgot-password-basic.html">
                     <small>Forgot Password?</small>
                   </a>
-                </div>
-                <div class="mb-3">
-                  <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
+                </div> --}}
+                <div class="mt-3">
+                  <button id="loginButton" class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
                 </div>
               </form>
 
-              <p class="text-center">
+              {{-- <p class="text-center">
                 <span>New on our platform?</span>
                 <a href="#">
                   <span>Create an account</span>
                 </a>
-              </p>
+              </p> --}}
 
               {{-- <div class="divider my-4">
                 <div class="divider-text">or</div>
@@ -161,6 +161,14 @@
 
     <!-- Page JS -->
     <script src="{{ asset('admin/js/pages-auth.js') }}"></script>
+    <script>
+      $(document).ready(function() {
+        $('#loginForm').submit(function() {
+          // Mengubah teks tombol saat proses submit
+          $('#loginButton').html('<i class="fa fa-spinner fa-spin"></i> Processing...');
+        });
+      });
+    </script>
   </body>
 
 </html>

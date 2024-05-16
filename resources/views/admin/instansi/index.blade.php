@@ -17,6 +17,7 @@
               <th>No</th>
               <th>Instansi</th>
               <th>Tinggi Badan</th>
+              <th>Jumlah Pendidikan</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -37,15 +38,16 @@
                 <input type="hidden" name="id" id="id">
                 <div class="">
                   <div class="col mb-3">
-                    <label for="nik" class="form-label">Nama Instansi</label>
+                    <label for="nama_instansi" class="form-label">Nama Instansi <span style="color: red">*</span></label>
                     <input type="text" id="nama_instansi" name="nama_instansi" class="form-control"
                       placeholder="Masukkan nama instansi" />
                     <span class="invalid-feedback" id="nama_instansi_error"></span>
                   </div>
                   <div class="col mb-0">
-                    <label for="email" class="form-label">Tinggi Badan Minimal</label>
-                    <input type="text" id="min_tinggi_badan" name="min_tinggi_badan" class="form-control"
-                      placeholder="1xx" />
+                    <label for="min_tinggi_badan" class="form-label">Tinggi Badan Minimal <span
+                        style="color: red">*</span></label>
+                    <input type="number" min="1" id="min_tinggi_badan" name="min_tinggi_badan"
+                      class="form-control" placeholder="1xx" />
                     <span class="invalid-feedback" id="min_tinggi_badan_error"></span>
                   </div>
                 </div>
@@ -67,6 +69,12 @@
     <script type="text/javascript">
       var table;
       $(document).ready(function() {
+        jQuery.fn.dataTable.Api.register('processing()', function(show) {
+          return this.iterator('table', function(ctx) {
+            ctx.oApi._fnProcessingDisplay(ctx, show);
+          });
+        });
+
         table = $('#{{ $table_id }}').DataTable({
 
           "language": {
@@ -85,7 +93,10 @@
               params._token = "{{ csrf_token() }}";
             }
           },
-
+          initComplete: function() {
+            // Inisialisasi tooltip di dalam fungsi ini
+            $('[data-bs-toggle="tooltip"]').tooltip();
+          },
           language: {
             search: "",
             searchPlaceholder: "Type in to Search",
@@ -123,6 +134,13 @@
               class: 'text-left'
             },
             {
+              data: 'jumlah_pendidikan',
+              name: 'jumlah_pendidikan',
+              orderable: true,
+              searchable: true,
+              class: 'text-left'
+            },
+            {
               data: 'action',
               name: 'id',
               orderable: false,
@@ -142,6 +160,7 @@
         $('.dataTables_filter').html(
           '<div class="input-group flex-nowrap"><span class="input-group-text" id="addon-wrapping"><i class="tf-icons ti ti-search"></i></span><input type="search" class="form-control form-control-sm" placeholder="Type in to Search" aria-label="Type in to Search" aria-describedby="addon-wrapping"></div>'
         );
+        z
 
         // Handle search input changes using DataTables API
         $('#{{ $table_id }}_filter input').on('keyup', function() {
@@ -260,7 +279,7 @@
               dataType: "JSON",
               success: function(data) {
                 if (data.success == 1) {
-                  table.ajax.reload();
+                  table.draw();
                   Swal.fire({
                     title: 'Sukses',
                     text: data.msg,
